@@ -2,54 +2,77 @@
 
 /* ──────────────────────────────────────────────────────────────────────────
    status-page — design tokens
-   A calm, monochrome surface. Status colour is the only chroma on the page,
-   so it carries all the meaning. Light by default; dark via the theme switcher ([data-theme="dark"]).
+   Mirrors the lanitech360.com marketing theme: a cool off-white canvas, white
+   surfaces, soft blue-grey separators, navy ink and the #1C67F6 brand blue.
+   Status colour stays the only strong chroma on the page, so it carries the
+   meaning. Light by default; dark via the theme switcher ([data-theme="dark"]).
    ────────────────────────────────────────────────────────────────────────── */
 
 :root {
-  --bg: #fbfbfa;
+  --bg: #fafafa;
   --surface: #ffffff;
-  --border: #ececea;
-  --border-strong: #e0e0dd;
-  --text: #1a1a18;
-  --text-soft: #6b6b66;
-  --text-faint: #9a9a93;
+  --surface-subtle: #f5f8fc;
+  --border: #e7ecf3;
+  --border-strong: #d8e0ea;
+  --text: #10243a;
+  --text-soft: #465463;
+  --text-faint: #7b8794;
 
-  --ok: #2ea66b;
-  --ok-soft: #e7f6ee;
-  --degraded: #d9920a;
-  --degraded-soft: #fbf1dc;
-  --down: #d64545;
-  --down-soft: #fbe6e6;
-  --maint: #4a73d6;
-  --maint-soft: #e7eefb;
-  --muted: #b4b4ae;
+  --brand: #1c67f6;
+  --brand-soft: #eef4ff;
+  --ink-btn: #122e49;
+  --ink-btn-hover: #1d425f;
+  --ink-btn-text: #ffffff;
 
-  --font-sans: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI",
+  --ok: #1f9a62;
+  --ok-soft: #e5f4ec;
+  --degraded: #c98606;
+  --degraded-soft: #fff6e5;
+  --down: #d14545;
+  --down-soft: #fdecec;
+  --maint: #1c67f6;
+  --maint-soft: #eef4ff;
+  --muted: #d3dbe5;
+
+  --header-bg: rgb(255 255 255 / 0.86);
+  --card-shadow: 0 1px 2px rgb(16 36 58 / 0.04), 0 8px 24px rgb(16 36 58 / 0.04);
+
+  --font-sans: var(--font-figtree), system-ui, -apple-system, "Segoe UI",
     sans-serif;
+  --font-display: var(--font-inter), var(--font-figtree), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
 
   color-scheme: light;
 }
 
 [data-theme="dark"] {
-  --bg: #0e0e10;
-  --surface: #161618;
-  --border: #232326;
-  --border-strong: #2c2c30;
-  --text: #ededed;
-  --text-soft: #a0a0a0;
-  --text-faint: #6a6a6e;
+  --bg: #15181c;
+  --surface: #1c2025;
+  --surface-subtle: #23282f;
+  --border: #2c333c;
+  --border-strong: #343c47;
+  --text: #f3f6fa;
+  --text-soft: #a9b3c1;
+  --text-faint: #818c9b;
+
+  --brand: #7da6ff;
+  --brand-soft: #20304d;
+  --ink-btn: #f3f6fb;
+  --ink-btn-hover: #dce7f6;
+  --ink-btn-text: #10243a;
 
   --ok: #3ecf8e;
-  --ok-soft: #122a1f;
-  --degraded: #e6a924;
-  --degraded-soft: #2c2410;
-  --down: #f06a6a;
-  --down-soft: #2c1414;
-  --maint: #6a8fe6;
-  --maint-soft: #141d2e;
-  --muted: #3a3a3e;
+  --ok-soft: #15291f;
+  --degraded: #e7b860;
+  --degraded-soft: #3b3020;
+  --down: #ef8080;
+  --down-soft: #3a2226;
+  --maint: #7da6ff;
+  --maint-soft: #20304d;
+  --muted: #3a424d;
+
+  --header-bg: rgb(28 32 37 / 0.82);
+  --card-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
 
   color-scheme: dark;
 }
@@ -61,6 +84,7 @@
 html {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -68,16 +92,11 @@ body {
   color: var(--text);
   font-family: var(--font-sans);
   min-height: 100vh;
+  overflow-x: clip;
 }
 
-@keyframes statusPulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 var(--pulse-color, transparent);
-  }
-  50% {
-    box-shadow: 0 0 0 4px transparent;
-  }
+.font-display {
+  font-family: var(--font-display);
 }
 
 @keyframes fadeUp {
@@ -102,11 +121,42 @@ body {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
   }
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 .logo-dark { display: none; }
 [data-theme="dark"] .logo-light { display: none; }
 [data-theme="dark"] .logo-dark { display: block; }
+
+/* Sticky top bar, translucent over scrolling content. */
+.site-header {
+  background: var(--header-bg);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--card-shadow);
+}
+
+.btn-primary {
+  background: var(--ink-btn);
+  color: var(--ink-btn-text);
+  transition: background-color 0.18s ease;
+}
+.btn-primary:hover {
+  background: var(--ink-btn-hover);
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
 /* Theme switcher: a pill with a sliding thumb behind the active icon. */
 .theme-toggle {
   position: relative;
@@ -124,10 +174,6 @@ body {
 }
 .theme-toggle:hover {
   border-color: var(--text-faint);
-}
-.theme-toggle:focus-visible {
-  outline: 2px solid var(--maint);
-  outline-offset: 2px;
 }
 .theme-thumb {
   position: absolute;
