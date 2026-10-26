@@ -1,0 +1,19 @@
+# Vercel Hobby only allows daily crons, so this calls /api/cron every 5
+# minutes instead. Needs the CRON_SECRET repo secret (same value as the
+# CRON_SECRET env var on Vercel).
+name: Probe services
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call /api/cron
+        run: |
+          curl --fail --silent --show-error --max-time 60 \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            https://status.lanitech360.com/api/cron
