@@ -7,23 +7,25 @@
 // ──────────────────────────────────────────────────────────────────────────
 
 import type { UpdateLevel } from "@/lib/incidents";
-import { httpProbe, type ServiceDef } from "@/lib/probes";
+import { httpProbe, reachableProbe, type ServiceDef } from "@/lib/probes";
 
 export const SITE = {
   /** Product or company name, shown in the header and the © footer. */
-  name: "Acme",
+  name: "LaniTech360",
   /** Browser tab + Open Graph title. */
-  title: "Acme Status",
-  description: "Live status and uptime for everything at Acme.",
+  title: "LaniTech360 Status",
+  description: "Live status and uptime for everything at LaniTech360.",
   /** Canonical URL of this status page (used for Open Graph metadata). */
-  url: "https://status.example.com",
+  url: "https://status.lanitech360.com",
   /** Where the header link points. Set to null to hide the link. */
-  homepage: "https://example.com" as string | null,
+  homepage: "https://lanitech360.com" as string | null,
   /**
    * Optional logo, as a path under /public (e.g. "/logo-mark.png").
    * With null, the header renders a live status dot as the mark.
    */
-  logo: null as string | null,
+  logo: "/logo.svg" as string | null,
+  /** Logo variant shown in the dark theme. Falls back to `logo` when null. */
+  logoDark: "/logo-dark.svg" as string | null,
   /**
    * The calendar timezone for daily uptime buckets. Probes are aggregated
    * per *day*, so pick the timezone your team (or most of your users) lives
@@ -53,10 +55,10 @@ export const NOTIFICATIONS = {
   levels: ["investigating", "identified", "resolved"] as UpdateLevel[],
   /**
    * From address for email notifications. The domain must be verified in
-   * your Resend account. Use a subdomain (e.g. updates.example.com) so
+   * your Resend account. Use a subdomain (e.g. updates.lanitech360.com) so
    * status mail can't hurt your primary domain's reputation.
    */
-  emailFrom: "Acme Status <status@updates.example.com>",
+  emailFrom: "LaniTech360 Status <status@updates.lanitech360.com>",
 };
 
 // ──────────────────────────────────────────────────────────────────────────
@@ -78,16 +80,41 @@ export const NOTIFICATIONS = {
 
 export const SERVICES: ServiceDef[] = [
   {
-    id: "web",
+    id: "website",
     name: "Website",
-    description: "The site you open in your browser",
-    probe: httpProbe("https://example.com/"),
+    description: "Main LaniTech360 website",
+    probe: httpProbe("https://lanitech360.com/"),
   },
   {
-    id: "api",
-    name: "API",
-    description: "Powers every request behind the app",
-    probe: httpProbe("https://example.org/"),
+    id: "business-suite-web",
+    name: "Business Suite",
+    description: "Powers the main business suite app",
+    probe: httpProbe("https://lanitech360-biz.com/"),
+  },
+  {
+    id: "business-suite-api",
+    name: "Business Suite API",
+    description: "Powers the backend behind the app",
+    // The API rejects anonymous requests, so a 401 still means it's up.
+    probe: reachableProbe("https://backend.lanitech360-biz.com/"),
+  },
+  {
+    id: "stripe",
+    name: "Card Payments (Stripe)",
+    description: "International card payments",
+    probe: reachableProbe("https://api.stripe.com/"),
+  },
+  {
+    id: "paynow",
+    name: "Paynow",
+    description: "Local mobile money and bank payments",
+    probe: reachableProbe("https://www.paynow.co.zw/"),
+  },
+  {
+    id: "zimra",
+    name: "ZIMRA Fiscalization",
+    description: "Fiscal receipt submission to ZIMRA",
+    probe: reachableProbe("https://fdmsapi.zimra.co.zw/Public/v1/GetServerCertificate"),
   },
 
   // A service that isn't publicly routable, read through your API's
@@ -97,7 +124,7 @@ export const SERVICES: ServiceDef[] = [
   //   id: "worker",
   //   name: "Background Worker",
   //   description: "Processes jobs and scheduled tasks",
-  //   probe: dependencyProbe("https://api.example.com/health/ready", "worker"),
+  //   probe: dependencyProbe("https://api.lanitech360.com/health/ready", "worker"),
   // },
 
   // A Supabase project (anon key optional — without it, an answering

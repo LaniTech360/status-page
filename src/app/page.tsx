@@ -1,6 +1,6 @@
 import { probeAll, SERVICES } from "@/lib/services";
 import { readHistory, type UptimeDay } from "@/lib/history";
-import Image from "next/image";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { LiveStatus } from "@/components/LiveStatus";
 import { StatusDot } from "@/components/StatusDot";
 import { IncidentList } from "@/components/IncidentList";
@@ -56,25 +56,38 @@ export default async function Page({
       <header className="mb-8 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           {SITE.logo ? (
-            <Image
-              src={SITE.logo}
-              alt={SITE.name}
-              width={26}
-              height={26}
-              priority
-              className="h-[26px] w-[26px] object-contain"
-            />
+            <>
+              {/* eslint-disable @next/next/no-img-element */}
+              <img
+                src={SITE.logo}
+                alt={SITE.name}
+                height={22}
+                className="logo-light h-[22px] w-auto"
+              />
+              <img
+                src={SITE.logoDark ?? SITE.logo}
+                alt={SITE.name}
+                height={22}
+                className="logo-dark h-[22px] w-auto"
+              />
+              <span className="text-[15px] font-normal text-[var(--text-faint)]">
+                Status
+              </span>
+            </>
           ) : (
-            <StatusDot status={overall} size={12} />
+            <>
+              <StatusDot status={overall} size={12} />
+              <span className="text-[15px] font-semibold tracking-[-0.01em] text-[var(--text)]">
+                {SITE.name}
+                <span className="ml-1.5 font-normal text-[var(--text-faint)]">
+                  Status
+                </span>
+              </span>
+            </>
           )}
-          <span className="text-[15px] font-semibold tracking-[-0.01em] text-[var(--text)]">
-            {SITE.name}
-            <span className="ml-1.5 font-normal text-[var(--text-faint)]">
-              Status
-            </span>
-          </span>
         </div>
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           {canSubscribe && <SubscribeForm />}
           {SITE.homepage && (
             <a
