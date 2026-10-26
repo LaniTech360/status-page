@@ -25,6 +25,7 @@ import type { ProbeResult, Health } from "./services";
 import { overallStatus } from "./services";
 import type { Incident, IncidentImpact, UpdateLevel } from "./incidents";
 import { kvEnabled, kvGetJSON, kvSetJSON } from "./kv";
+import { dayKey } from "./history";
 
 // Tuning. At the default 5-minute cron cadence: open ≈ 10 min of sustained
 // failure, resolve ≈ 10 min of sustained recovery. Lower OPEN_AFTER_BAD to 1
@@ -320,4 +321,33 @@ export function mergeIncidents(
   return [...byId.values()].sort(
     (a, b) => latestActivity(b) - latestActivity(a),
   );
+}
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * Index incidents by the calendar days they spanned, per affected service, so
+ * each uptime-bar tick can name the incidents behind it. An ongoing incident
+ * runs through today.
+ */
+export function incidentDays(
+  incidents: Incident[],
+): Record<string, Record<string, string[]>> {
+  const out: Record<string, Record<string, string[]>> = {};
+  const now = Date.now();
+  for (const inc of incidents) {
+    const times = inc.updates.map((u) => new Date(u.at).getTime());
+    if (times.length === 0) continue;
+    const start = Math.min(...times);
+    const end = isOngoing(inc) ? now : Math.max(...times);
+    const days = new Set<string>([dayKey(new Date(end))]);
+    for (let t = start; t < end && days.size < 92; t += DAY_MS) {
+      days.add(dayKey(new Date(t)));
+    }
+    for (const id of inc.affected) {
+      const byDay = (out[id] ??= {});
+      for (const d of days) (byDay[d] ??= []).push(inc.title);
+    }
+  }
+  return out;
 }

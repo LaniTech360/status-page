@@ -22,6 +22,7 @@ export async function probeAll(): Promise<ProbeResult[]> {
         id: svc.id,
         name: svc.name,
         description: svc.description,
+        group: svc.group,
         status,
         latencyMs,
         checkedAt,

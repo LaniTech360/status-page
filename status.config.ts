@@ -76,44 +76,52 @@ export const NOTIFICATIONS = {
 //                                     health endpoint
 //
 // Or write your own: any async () => { status, latencyMs } works.
+//
+// Give services a `group` to list them under a shared heading on the page.
 // ──────────────────────────────────────────────────────────────────────────
 
 export const SERVICES: ServiceDef[] = [
   {
     id: "website",
     name: "Website",
-    description: "Main LaniTech360 website",
+    description: "lanitech360.com: product info, pricing and sign-up",
+    group: "Platform",
     probe: httpProbe("https://lanitech360.com/"),
   },
   {
     id: "business-suite-web",
     name: "Business Suite",
-    description: "Powers the main business suite app",
+    description: "The web app: point of sale, invoicing, customers, calendar and finance",
+    group: "Platform",
     probe: httpProbe("https://lanitech360-biz.com/"),
   },
   {
     id: "business-suite-api",
     name: "Business Suite API",
-    description: "Powers the backend behind the app",
+    description: "Saves and loads your business data for the app",
+    group: "Platform",
     // The API rejects anonymous requests, so a 401 still means it's up.
     probe: reachableProbe("https://backend.lanitech360-biz.com/"),
   },
   {
     id: "stripe",
     name: "Card Payments (Stripe)",
-    description: "International card payments",
+    description: "Visa and Mastercard payments, processed by Stripe",
+    group: "Payments & Integrations",
     probe: reachableProbe("https://api.stripe.com/"),
   },
   {
     id: "paynow",
     name: "Paynow",
-    description: "Local mobile money and bank payments",
+    description: "Mobile money and local bank payments in Zimbabwe, via Paynow",
+    group: "Payments & Integrations",
     probe: reachableProbe("https://www.paynow.co.zw/"),
   },
   {
     id: "zimra",
     name: "ZIMRA Fiscalization",
-    description: "Fiscal receipt submission to ZIMRA",
+    description: "Sends fiscal receipts to ZIMRA so your sales stay tax-compliant",
+    group: "Payments & Integrations",
     probe: reachableProbe("https://fdmsapi.zimra.co.zw/Public/v1/GetServerCertificate"),
   },
 

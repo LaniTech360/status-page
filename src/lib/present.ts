@@ -11,7 +11,7 @@ export const STATUS_LABEL: Record<Health, string> = {
 };
 
 export const HEADLINE: Record<Health, string> = {
-  operational: "Everything is running smoothly",
+  operational: "All services are online",
   degraded: "A few things are running slow",
   down: "We're looking into a problem",
   maintenance: "We're doing some scheduled upkeep",

@@ -14,6 +14,8 @@ export interface ProbeResult {
   id: string;
   name: string;
   description: string;
+  /** Section heading the row is listed under (see ServiceDef.group). */
+  group?: string;
   status: Health;
   /** Round-trip latency in ms, or null if the probe never got a response. */
   latencyMs: number | null;
@@ -24,6 +26,8 @@ export interface ServiceDef {
   id: string;
   name: string;
   description: string;
+  /** Optional section heading; services sharing a group render together. */
+  group?: string;
   probe: () => Promise<{ status: Health; latencyMs: number | null }>;
 }
 
