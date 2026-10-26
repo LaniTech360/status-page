@@ -3,7 +3,7 @@
 /* ──────────────────────────────────────────────────────────────────────────
    status-page — design tokens
    A calm, monochrome surface. Status colour is the only chroma on the page,
-   so it carries all the meaning. Light + dark, system-driven.
+   so it carries all the meaning. Light by default; dark via the theme switcher ([data-theme="dark"]).
    ────────────────────────────────────────────────────────────────────────── */
 
 :root {
@@ -32,28 +32,26 @@
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0e0e10;
-    --surface: #161618;
-    --border: #232326;
-    --border-strong: #2c2c30;
-    --text: #ededed;
-    --text-soft: #a0a0a0;
-    --text-faint: #6a6a6e;
+[data-theme="dark"] {
+  --bg: #0e0e10;
+  --surface: #161618;
+  --border: #232326;
+  --border-strong: #2c2c30;
+  --text: #ededed;
+  --text-soft: #a0a0a0;
+  --text-faint: #6a6a6e;
 
-    --ok: #3ecf8e;
-    --ok-soft: #122a1f;
-    --degraded: #e6a924;
-    --degraded-soft: #2c2410;
-    --down: #f06a6a;
-    --down-soft: #2c1414;
-    --maint: #6a8fe6;
-    --maint-soft: #141d2e;
-    --muted: #3a3a3e;
+  --ok: #3ecf8e;
+  --ok-soft: #122a1f;
+  --degraded: #e6a924;
+  --degraded-soft: #2c2410;
+  --down: #f06a6a;
+  --down-soft: #2c1414;
+  --maint: #6a8fe6;
+  --maint-soft: #141d2e;
+  --muted: #3a3a3e;
 
-    color-scheme: dark;
-  }
+  color-scheme: dark;
 }
 
 * {
@@ -104,4 +102,61 @@ body {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+.logo-dark { display: none; }
+[data-theme="dark"] .logo-light { display: none; }
+[data-theme="dark"] .logo-dark { display: block; }
+/* Theme switcher: a pill with a sliding thumb behind the active icon. */
+.theme-toggle {
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  width: 58px;
+  height: 30px;
+  padding: 3px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.theme-toggle:hover {
+  border-color: var(--text-faint);
+}
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--maint);
+  outline-offset: 2px;
+}
+.theme-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--text);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+  transition: transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+[data-theme="dark"] .theme-thumb {
+  transform: translateX(28px);
+}
+.theme-icon {
+  position: relative;
+  justify-self: center;
+  transition: color 0.25s ease;
+}
+.theme-sun {
+  color: var(--bg);
+}
+.theme-moon {
+  color: var(--text-faint);
+}
+[data-theme="dark"] .theme-sun {
+  color: var(--text-faint);
+}
+[data-theme="dark"] .theme-moon {
+  color: var(--bg);
 }

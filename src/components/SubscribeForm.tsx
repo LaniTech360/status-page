@@ -62,7 +62,7 @@ export function SubscribeForm() {
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="you@example.com"
+        placeholder="you@lanitech360.com"
         disabled={phase === "sending"}
         className="w-44 rounded-md border bg-[var(--surface)] px-2.5 py-1 text-[12.5px] text-[var(--text)] placeholder:text-[var(--text-faint)] focus:outline-none focus:ring-1 focus:ring-[var(--text-faint)]"
       />

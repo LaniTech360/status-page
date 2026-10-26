@@ -67,6 +67,23 @@ export function httpProbe(url: string, init?: RequestInit) {
 }
 
 /**
+ * "Is anything answering" probe for endpoints that reject anonymous requests
+ * (APIs, payment gateways). Any response below 500 — including 401/403/404 —
+ * means the service is up and reachable; 5xx → degraded; no response → down.
+ */
+export function reachableProbe(url: string, init?: RequestInit) {
+  return async (): Promise<{ status: Health; latencyMs: number | null }> => {
+    try {
+      const { res, ms } = await timedFetch(url, init);
+      if (res.status < 500) return { status: "operational", latencyMs: ms };
+      return { status: "degraded", latencyMs: ms };
+    } catch {
+      return { status: "down", latencyMs: null };
+    }
+  };
+}
+
+/**
  * Probe a service that isn't publicly routable by reading it as a named
  * dependency of a JSON readiness endpoint you do expose. Expects a payload
  * like `{ dependencies: { worker: "ok", ... } }` or `{ checks: { ... } }` —

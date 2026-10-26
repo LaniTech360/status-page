@@ -45,10 +45,10 @@ Built and battle-tested by [Clusy](https://clusy.io), where it runs
 
    ```ts
    export const SITE = {
-     name: "Acme",
-     title: "Acme Status",
-     url: "https://status.acme.com",
-     homepage: "https://acme.com",
+     name: "LaniTech360",
+     title: "LaniTech360 Status",
+     url: "https://status.lanitech360.com",
+     homepage: "https://lanitech360.com",
      // …
    };
 
@@ -57,7 +57,7 @@ Built and battle-tested by [Clusy](https://clusy.io), where it runs
        id: "api",
        name: "API",
        description: "Powers every request behind the app",
-       probe: httpProbe("https://api.acme.com/health"),
+       probe: httpProbe("https://api.lanitech360.com/health"),
      },
      // …
    ];
