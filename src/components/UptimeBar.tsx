@@ -109,7 +109,7 @@ export function UptimeBar({
                 background: isTodayOverlay
                   ? STATUS_VAR[overlayToday].fg
                   : uptimeColor(d.uptime, d.degraded),
-                opacity: d.uptime === null && !isTodayOverlay ? 0.25 : 1,
+                opacity: d.uptime === null && !isTodayOverlay ? 0.55 : 1,
                 minWidth: 2,
                 outline:
                   hover === i ? "1px solid var(--text-faint)" : "none",
