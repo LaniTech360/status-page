@@ -34,7 +34,7 @@ export const SITE = {
    */
   timezone: "UTC",
   /** Small "powered by" credit in the footer. Set false to hide. */
-  showPoweredBy: true,
+  showPoweredBy: false,
 };
 
 // ──────────────────────────────────────────────────────────────────────────
